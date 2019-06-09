@@ -1,0 +1,5 @@
+/node_module/*
+/src/*.js
+/src/*.swp
+/src/components/*.js
+/src/components/*.swp
