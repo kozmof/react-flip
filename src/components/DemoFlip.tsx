@@ -48,7 +48,7 @@ export class DemoFlip extends Flip<Refs, {}, DemoState, DemoROS> {
   immutableJSX (ros: DemoROS) {
     return ( 
       <div>  
-        {ros.text + " "} 
+        { ros.text + " " } 
         <button onClick={() => this.flip()}> Unlock </button>
       </div>
     )
