@@ -1,66 +1,69 @@
-## react-stack
-Generic stack component 
+## react-flip
+Generic flip component 
 
-## Usage
+## Example
 
-### Immutable
 ```typescript
 
-class Trainer {
-  constructor(public id: number, public name: string, public place: string) {}
+import * as React from "react"; 
+import { FlipState, ROFlipState, Flip } from "./Flip"
+
+interface Refs {
+  inputRef: React.RefObject<HTMLInputElement> 
 }
 
-export class IMStackDemo extends IMStack<Trainer, StackItems<Trainer>, {}> {
-  constructor(props: StackItems<Trainer>){
-    super(props, {});
-  }
+export type DemoState = FlipState<Refs> & { text: string };
+export type DemoROS = ROFlipState<Refs, DemoState>
 
-  callPack() {
-    return (item: Trainer) => {
-      return(
-        <tr key={item.id}>     
-          <td>Name: {item.name}</td>
-          <td>Place: {item.place}</td>
-          <td><button onClick={() => alert("!")}>!</button></td>
-        </tr>
-      );
-    }
-  }
-}
-
-```
-
-### Mutable
-```typescript
-class Pokemon {
-  constructor(public id: number, public name: string) {}
-}
-
-export class MStackDemo extends MStack<Pokemon, {}, StackItems<Pokemon>> {
-  constructor(){
-    super({}, {items: [new Pokemon(1, "Bulbasaur"), new Pokemon(4, "Charmander"), new Pokemon(7, "Squirtle")]});
-  }
-
-  callPack() {
-    const remove = (id: number) => {
-      const items = this.state.items;
-      for(let n = 0; n < items.length; n++){
-        if(items[n].id === id){
-          items.splice(n, 1);
-          this.setState({items: items});
-          return 
-        }
+export class DemoFlip extends Flip<Refs, {}, DemoState, DemoROS> {
+  constructor () {
+    const initState : DemoState = {
+      isMutable: false,  
+      text: "Hello",
+      refs: {
+        inputRef: React.createRef<HTMLInputElement>()
       }
     }
 
-    return (item: Pokemon) => {
-      return(
-        <tr key={item.id}>     
-          <td>Name: {item.name}</td>
-          <td><button onClick={() => remove(item.id)}>!</button></td>
-        </tr>
-      );
-    }
+    super({}, initState); 
+    this.moveInput.bind(this);
+    this.combine.bind(this);
+    this.mutableJSX.bind(this);
+    this.immutableJSX.bind(this);
+    this.toROS.bind(this);
+  }
+
+  moveInput () {
+    this.setState({ text: this.state.refs.inputRef.current.value })
+  }
+
+  combine () {
+    this.moveInput(); 
+    this.flip()
+  }
+
+  mutableJSX (refs: Refs) {
+    return (
+      <div>  
+        <input type="text" ref={refs.inputRef} defaultValue={this.state.text}/>
+        <button onClick={() => this.combine()}> Lock </button>
+      </div>
+    )
+  }
+
+
+  immutableJSX (ros: DemoROS) {
+    return ( 
+      <div>  
+        {ros.text + " "} 
+        <button onClick={() => this.flip()}> Unlock </button>
+      </div>
+    )
+  }
+
+  toROS(s: DemoState) {
+    const t = s.text;
+    return { text: t } 
   }
 }
 
