@@ -194,7 +194,7 @@ const React = __webpack_require__(/*! react */ "react");
 const ReactDom = __webpack_require__(/*! react-dom */ "react-dom");
 const DemoFlip_1 = __webpack_require__(/*! ./components/DemoFlip */ "./src/components/DemoFlip.tsx");
 ReactDom.render(React.createElement("div", null,
-    React.createElement("p", null, "Fiip Demo"),
+    React.createElement("p", null, "Flip Demo"),
     React.createElement(DemoFlip_1.DemoFlip, null)), document.getElementById("demo"));
 
 
